@@ -1,4 +1,5 @@
 class Noeud:
+    
     def __init__(self, max, matrice):
         self.matrice = matrice        # La grille du jeu
         self.max = max                # Booléen, True pour un nœud Max, False pour un nœud Min
@@ -43,32 +44,58 @@ class Noeud:
         return 0
 
     def troisPionsPossiblesLigne(self, type_joueur):
-        # Retourne un score pour les lignes avec des configurations favorables pour l'alignement
         score = 0
         for row in self.matrice:
             for col in range(len(row) - 2):
-                # Deux pions et une case vide
-                if row[col] == row[col + 1] == type_joueur and row[col + 2] == 0:
+                count = sum(1 for k in range(3) if row[col + k] == type_joueur)
+                empty = sum(1 for k in range(3) if row[col + k] == 0)
+                if count == 2 and empty == 1:  # Deux pions et une case vide
                     score += 200
-                elif row[col] == type_joueur and row[col + 1] == row[col + 2] == 0:
+                elif count == 1 and empty == 2:  # Un pion et deux cases vides
                     score += 30
         return score
-
+    
     def troisPionsPossiblesColonne(self, type_joueur):
-        # Retourne un score pour les colonnes avec des configurations favorables pour l'alignement
         score = 0
         for col in range(len(self.matrice[0])):
             for row in range(len(self.matrice) - 2):
-                # Deux pions et une case vide
-                if (self.matrice[row][col] == self.matrice[row + 1][col] == type_joueur and self.matrice[row + 2][col] == 0):
+                count = sum(1 for k in range(3) if self.matrice[row + k][col] == type_joueur)
+                empty = sum(1 for k in range(3) if self.matrice[row + k][col] == 0)
+                if count == 2 and empty == 1:  # Deux pions et une case vide
                     score += 200
-                elif self.matrice[row][col] == type_joueur and self.matrice[row + 1][col] == self.matrice[row + 2][col] == 0:
+                elif count == 1 and empty == 2:  # Un pion et deux cases vides
                     score += 30
         return score
 
     def evaluer(self):
-        # Évalue la position du nœud pour déterminer si elle est favorable ou non
-        self.h = (-1 * self.troisPionsAlignesLigne(False) + self.troisPionsAlignesLigne(True)
-                  -1 * self.troisPionsAlignesColonne(False) + self.troisPionsAlignesColonne(True)
-                  -1 * self.troisPionsPossiblesLigne(False) + self.troisPionsPossiblesLigne(True)
-                  -1 * self.troisPionsPossiblesColonne(False) + self.troisPionsPossiblesColonne(True))
+        # Calcule l'évaluation finale en combinant les évaluations positives et négatives
+        self.h = (-1 * self.troisPionsAlignesLigne(2) + self.troisPionsAlignesLigne(1)
+                  -1 * self.troisPionsAlignesColonne(2) + self.troisPionsAlignesColonne(1)
+                  -1 * self.troisPionsPossiblesLigne(2) + self.troisPionsPossiblesLigne(1)
+                  -1 * self.troisPionsPossiblesColonne(2) + self.troisPionsPossiblesColonne(1))
+
+# Initialiser la matrice avec la situation de jeu intermédiaire
+matrice_jeu = [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [1, 2, 0, 2, 0]
+]
+
+# Créer une instance de Noeud en mode Max (par exemple)
+noeud = Noeud(1, matrice_jeu)
+
+# Appeler les méthodes de test et afficher les résultats
+print("troisPionsAlignesLigne (joueur True):", noeud.troisPionsAlignesLigne(1))
+print("troisPionsAlignesLigne (joueur False):", noeud.troisPionsAlignesLigne(2))
+print("troisPionsAlignesColonne (joueur True):", noeud.troisPionsAlignesColonne(1))
+print("troisPionsAlignesColonne (joueur False):", noeud.troisPionsAlignesColonne(2))
+print("troisPionsPossiblesLigne (joueur True):", noeud.troisPionsPossiblesLigne(1))
+print("troisPionsPossiblesLigne (joueur False):", noeud.troisPionsPossiblesLigne(2))
+print("troisPionsPossiblesColonne (joueur True):", noeud.troisPionsPossiblesColonne(1))
+print("troisPionsPossiblesColonne (joueur False):", noeud.troisPionsPossiblesColonne(2))
+
+# Évaluer la situation actuelle et afficher le score d'évaluation
+noeud.evaluer()
+print("Évaluation du noeud:", noeud.h)
