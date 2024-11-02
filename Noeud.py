@@ -84,18 +84,18 @@ matrice_jeu = [
 ]
 
 # Créer une instance de Noeud en mode Max (par exemple)
-noeud = Noeud(1, matrice_jeu)
+# noeud = Noeud(1, matrice_jeu)
 
 # Appeler les méthodes de test et afficher les résultats
-print("troisPionsAlignesLigne (joueur True):", noeud.troisPionsAlignesLigne(1))
-print("troisPionsAlignesLigne (joueur False):", noeud.troisPionsAlignesLigne(2))
-print("troisPionsAlignesColonne (joueur True):", noeud.troisPionsAlignesColonne(1))
-print("troisPionsAlignesColonne (joueur False):", noeud.troisPionsAlignesColonne(2))
-print("troisPionsPossiblesLigne (joueur True):", noeud.troisPionsPossiblesLigne(1))
-print("troisPionsPossiblesLigne (joueur False):", noeud.troisPionsPossiblesLigne(2))
-print("troisPionsPossiblesColonne (joueur True):", noeud.troisPionsPossiblesColonne(1))
-print("troisPionsPossiblesColonne (joueur False):", noeud.troisPionsPossiblesColonne(2))
+# print("troisPionsAlignesLigne (joueur True):", noeud.troisPionsAlignesLigne(1))
+# print("troisPionsAlignesLigne (joueur False):", noeud.troisPionsAlignesLigne(2))
+# print("troisPionsAlignesColonne (joueur True):", noeud.troisPionsAlignesColonne(1))
+# print("troisPionsAlignesColonne (joueur False):", noeud.troisPionsAlignesColonne(2))
+# print("troisPionsPossiblesLigne (joueur True):", noeud.troisPionsPossiblesLigne(1))
+# print("troisPionsPossiblesLigne (joueur False):", noeud.troisPionsPossiblesLigne(2))
+# print("troisPionsPossiblesColonne (joueur True):", noeud.troisPionsPossiblesColonne(1))
+# print("troisPionsPossiblesColonne (joueur False):", noeud.troisPionsPossiblesColonne(2))
 
-# Évaluer la situation actuelle et afficher le score d'évaluation
-noeud.evaluer()
-print("Évaluation du noeud:", noeud.h)
+# # Évaluer la situation actuelle et afficher le score d'évaluation
+# noeud.evaluer()
+# print("Évaluation du noeud:", noeud.h)

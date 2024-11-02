@@ -1,66 +1,142 @@
-import Coup
-import Noeud
+import copy
+from Coup import Coup
+from Noeud import Noeud
 
+
+# class Puissance3:
+#     WIDTH = 5
+#     HEIGHT = 5
+
+#     def __init__(self):
+#         self.matriceJeu = [[0 for _ in range(self.WIDTH)] for _ in range(self.HEIGHT)]
+
+#     def getMatriceJeu(self):
+#         return self.matriceJeu
+
+#     def jouer(self, typeJoueur, colonne, matrice):
+#         for i in range(self.HEIGHT - 1, -1, -1):
+#             if matrice[i][colonne] == 0:
+#                 matrice[i][colonne] = typeJoueur
+#                 return True
+#         return False
+
+#     def estFinJeu(self, typeJoueur, matrice):
+#         noeud = Noeud(typeJoueur, matrice)
+#         return noeud.troisPionsAlignesLigne(typeJoueur) == 1000 or noeud.troisPionsAlignesColonne(typeJoueur) == 1000
+
+#     def copieMatrice(self, mSource):
+#         return copy.deepcopy(mSource)
+
+#     def alpha_beta(self, noeud, alpha, beta, profondeur):
+#         if profondeur == 0 or self.estFinJeu(not noeud.isMax(), noeud.getMatrice()):
+#             noeud.evaluer()
+#             return Coup(noeud.getH(), -1)
+
+#         bestColonne = -1
+
+#         if noeud.isMax():
+#             maxEval = -float('inf')
+#             for col in range(self.WIDTH):
+#                 matriceCopie = self.copieMatrice(noeud.getMatrice())
+#                 if self.jouer(1, col, matriceCopie):
+#                     successeur = Noeud(False, matriceCopie)
+#                     coup = self.alpha_beta(successeur, alpha, beta, profondeur - 1)
+#                     if coup.getEval() > maxEval:
+#                         maxEval = coup.getEval()
+#                         bestColonne = col
+#                     alpha = max(alpha, coup.getEval())
+#                     if beta <= alpha:
+#                         break
+#             return Coup(maxEval, bestColonne)
+#         else:
+#             minEval = float('inf')
+#             for col in range(self.WIDTH):
+#                 matriceCopie = self.copieMatrice(noeud.getMatrice())
+#                 if self.jouer(2, col, matriceCopie):
+#                     successeur = Noeud(True, matriceCopie)
+#                     coup = self.alpha_beta(successeur, alpha, beta, profondeur - 1)
+#                     if coup.getEval() < minEval:
+#                         minEval = coup.getEval()
+#                         bestColonne = col
+#                     beta = min(beta, coup.getEval())
+#                     if beta <= alpha:
+#                         break
+#             return Coup(minEval, bestColonne)
+
+
+import copy
+from Noeud import Noeud
+from Coup import Coup
 
 class Puissance3:
     WIDTH = 5
     HEIGHT = 5
 
     def __init__(self):
-        # Initialise la matrice de jeu avec des zéros (cases vides)
+        """
+        Initialise la matrice du jeu avec les dimensions spécifiées.
+        """
         self.matriceJeu = [[0 for _ in range(self.WIDTH)] for _ in range(self.HEIGHT)]
 
     def getMatriceJeu(self):
         return self.matriceJeu
 
-    def jouer(self, type_joueur, colonne, matrice):
-        # Place un pion dans la colonne indiquée pour `type_joueur`
-        for row in range(self.HEIGHT - 1, -1, -1):
-            if matrice[row][colonne] == 0:
-                matrice[row][colonne] = type_joueur
+    def jouer(self, typeJoueur, colonne, matrice):
+        """
+        Place un pion pour le joueur spécifié dans la colonne donnée.
+        Retourne True si le coup est valide, sinon False.
+        """
+        for i in range(self.HEIGHT - 1, -1, -1):
+            if matrice[i][colonne] == 0:
+                matrice[i][colonne] = typeJoueur
                 return True
         return False
 
-    def estFinJeu(self, type_joueur, matrice):
-        # Vérifie si le jeu est fini (grille remplie ou alignement)
-        node = Noeud(type_joueur == 1, matrice)
-        return (node.troisPionsAlignesLigne(type_joueur) > 0 
-               or node.troisPionsAlignesColonne(type_joueur) > 0)
+    def estFinJeu(self, typeJoueur, matrice):
+        """
+        Vérifie si la partie est terminée (si le joueur a gagné ou si la grille est pleine).
+        """
+        noeud = Noeud(typeJoueur, matrice)
+        return noeud.troisPionsAlignesLigne(typeJoueur) == 1000 or noeud.troisPionsAlignesColonne(typeJoueur) == 1000
 
     def copieMatrice(self, mSource):
-        # Retourne une copie de la matrice
-        return [row[:] for row in mSource]
+        return copy.deepcopy(mSource)
 
+    def alpha_beta(self, noeud, alpha, beta, profondeur):
+        """
+        Implémente l'algorithme Alpha-Beta pour déterminer le meilleur coup pour l'IA.
+        """
+        if profondeur == 0 or self.estFinJeu(not noeud.isMax(), noeud.getMatrice()):
+            noeud.evaluer()
+            return Coup(noeud.getH(), -1)
 
-    def alpha_beta(self, n, alpha, beta, profondeur):
-        # Implémente l'algorithme Alpha-Beta
-        if profondeur == 0 or self.estFinJeu(not n.isMax(), n.getMatrice()):
-            n.evaluer()
-            return Coup(n.getH(), -1)
+        bestColonne = -1
 
-        if n.isMax():
-            best_eval = Coup(alpha, -1)
-            for j in range(self.WIDTH):
-                matrice_copie = self.copieMatrice(n.getMatrice())
-                if self.jouer(1, j, matrice_copie):
-                    successeur = Noeud(2, matrice_copie)
+        if noeud.isMax():
+            maxEval = -float('inf')
+            for col in range(self.WIDTH):
+                matriceCopie = self.copieMatrice(noeud.getMatrice())
+                if self.jouer(1, col, matriceCopie):
+                    successeur = Noeud(False, matriceCopie)
                     coup = self.alpha_beta(successeur, alpha, beta, profondeur - 1)
-                    if coup.getEval() > alpha:
-                        alpha = coup.getEval()
-                        best_eval = Coup(alpha, j)
-                    if alpha >= beta:
-                        break
-            return best_eval
-        else:
-            best_eval = Coup(beta, -1)
-            for j in range(self.WIDTH):
-                matrice_copie = self.copieMatrice(n.getMatrice())
-                if self.jouer(2, j, matrice_copie):
-                    successeur = Noeud(1, matrice_copie)
-                    coup = self.alpha_beta(successeur, alpha, beta, profondeur - 1)
-                    if coup.getEval() < beta:
-                        beta = coup.getEval()
-                        best_eval = Coup(beta, j)
+                    if coup.getEval() > maxEval:
+                        maxEval = coup.getEval()
+                        bestColonne = col
+                    alpha = max(alpha, coup.getEval())
                     if beta <= alpha:
                         break
-            return best_eval
+            return Coup(maxEval, bestColonne)
+        else:
+            minEval = float('inf')
+            for col in range(self.WIDTH):
+                matriceCopie = self.copieMatrice(noeud.getMatrice())
+                if self.jouer(2, col, matriceCopie):
+                    successeur = Noeud(True, matriceCopie)
+                    coup = self.alpha_beta(successeur, alpha, beta, profondeur - 1)
+                    if coup.getEval() < minEval:
+                        minEval = coup.getEval()
+                        bestColonne = col
+                    beta = min(beta, coup.getEval())
+                    if beta <= alpha:
+                        break
+            return Coup(minEval, bestColonne)
