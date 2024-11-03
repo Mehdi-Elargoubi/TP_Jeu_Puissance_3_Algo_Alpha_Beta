@@ -83,10 +83,8 @@ matrice_jeu = [
     [1, 2, 0, 2, 0]
 ]
 
-# Créer une instance de Noeud en mode Max (par exemple)
 # noeud = Noeud(1, matrice_jeu)
 
-# Appeler les méthodes de test et afficher les résultats
 # print("troisPionsAlignesLigne (joueur True):", noeud.troisPionsAlignesLigne(1))
 # print("troisPionsAlignesLigne (joueur False):", noeud.troisPionsAlignesLigne(2))
 # print("troisPionsAlignesColonne (joueur True):", noeud.troisPionsAlignesColonne(1))
